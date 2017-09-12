@@ -26,6 +26,22 @@ final = {}
 
 size = 8  --actual map size, can vary depend of the options
 
+--helping functions
+
+function get_max(array)
+  max = 0
+  pos = 1
+  for n = 1,#array do
+    if array[n][3]  > max then
+      max = array[n][3]
+      pos = n
+    end
+  end
+
+  return pos
+end
+
+
 --code to generate
 function create_map(size)
 
@@ -48,7 +64,7 @@ function create_map(size)
 end
 
 function fill_map(map)
-  
+
 end
 
 
@@ -73,8 +89,10 @@ function get_directions(x,y,xf,yf)
   local open = {node}
   local visited = {}
   local find = false
+
   while(find == false) do
-    
+    --for each of the sides
+
   end
 
 
@@ -94,5 +112,8 @@ end
 
 print(start[1],start[2])
 
+dummy = {{2,1,1},{2,3,4},{2,2,8},{2,3,4},{2,2,8}}
+
+print(get_max(dummy))
 --trial code
-print(math.random(1,10))
+--print(math.random(1,10))
