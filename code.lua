@@ -15,6 +15,9 @@ We use A* Algorith to find the best possible path
 
 ]]-- 
 
+
+
+require "data"
 --Initializing seed
 math.randomseed(os.time()) 
 
