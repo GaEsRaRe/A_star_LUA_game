@@ -7,15 +7,11 @@ Grid-based map
 States:
 0 is empty spot
 1 is blocked spot
-2 is character spot
 3 is finish spot
-4 is finished spot
 
 We use A* Algorith to find the best possible path
 
 ]]-- 
-
-
 
 require "data"
 --Initializing seed
@@ -47,7 +43,6 @@ end
 
 --code to generate
 function create_map(size)
-
   --We start our map
   local map = {}
   for n = 1,size do 
@@ -58,7 +53,6 @@ function create_map(size)
       map[n][m] = 0
     end
   end
-
 --borders
 for n = 1,size do
   map[1][n] = 1
@@ -75,17 +69,12 @@ map[2][start[2]] = 0
 return map
 end
 
-function fill_map(map)
-
-end
-
 function dont_exist(x,y,array)
   for i = 1,#array do
     if array[i][1] == x then
       if array[i][2] == y then
         print("find same")
         return false
-
       end
     end
   end
@@ -96,8 +85,7 @@ function get_heuristic(x,y,xf,yf)
   return math.sqrt((x-xf)*(x-xf) + (y-yf)*(y - yf))*10
 end
 
-
-a = get_heuristic(0,0,4,5)
+--a = get_heuristic(0,0,4,5)
 
 map1 = create_map(size)
 
