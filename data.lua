@@ -1,0 +1,1 @@
+father = {0,1,0,1,0,1} --fathers for genetic code

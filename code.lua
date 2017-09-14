@@ -77,11 +77,23 @@ function fill_map(map)
 
 end
 
+function dont_exist(x,y,array)
+  for i = 1,#array do
+    if array[i][1] == x then
+      if array[i][2] == y then
+        print("find same")
+        return false
 
+      end
+    end
+  end
+  return true
+end
 --code to work
 function get_heuristic(x,y,xf,yf)
-  return (math.abs(x-xf) + math.abs(y - yf))*10
+  return math.sqrt((x-xf)*(x-xf) + (y-yf)*(y - yf))*10
 end
+
 
 a = get_heuristic(0,0,4,5)
 
@@ -98,31 +110,49 @@ function get_directions(x,y,xf,yf)
   local movement = {}  -- 1 is left, 2 is right, 3 is up, 4 is down
   local weight = get_heuristic(x,y,xf,yf)
   local distance = 0;
+  local counter = 1;
   local node = {x,y,distance + weight,weight,0} --posx, posy, weight,
   local open = {node}
   local visited = {}
   local find = false
-  print(get_closest(open))
   local actual = open[get_closest(open)]
   local temp = {}
   while(find == false) do
+    table.insert(visited,
     table.remove(open,get_closest(open))
     --we check and add the parents
     if map1[x+1][y] ~= 1 then
-      temp = {x + 1,y, 10 + distance + get_heuristic(x+1,y,xf,yf),distance + 10,1}
-      table.insert(open,temp)
+      if dont_exist(x+1,y,open) then
+        if dont_exist(x+1,y,visited) then
+          temp = {x + 1,y, 10 + distance + get_heuristic(x+1,y,xf,yf),distance + 10,1}
+          table.insert(open,temp)
+        end
+      end
+      --Temp
+
     end
     if map1[x-1][y] ~= 1 then
-      temp = {x - 1,y, 10 + distance + get_heuristic(x-1,y,xf,yf),distance + 10,2}
-      table.insert(open,temp)
+      if dont_exist(x-1,y,open) then
+        if dont_exist(x-1,y,visited) then
+          temp = {x - 1,y, 10 + distance + get_heuristic(x-1,y,xf,yf),distance + 10,2}
+          table.insert(open,temp)
+          print(x,y,actual[3])
+        end
+      end
     end
     if map1[x][y+1] ~= 1 then
-      temp = {x,y + 1, 10 + distance + get_heuristic(x,y+1,xf,yf),distance + 10,3}
-      table.insert(open,temp)
+      if dont_exist(x,y+1,open) then
+        if dont_exist(x-1,y,visited) then
+          temp = {x,y + 1, 10 + distance + get_heuristic(x,y+1,xf,yf),distance + 10,3}
+          table.insert(open,temp)
+        end
+      end
     end
     if map1[x][y-1] ~= 1 then
-      temp = {x,y - 1, 10 + distance + get_heuristic(x,y-1,xf,yf),distance + 10,4}
-      table.insert(open,temp)
+      if dont_exist(x,y-1,open) then
+        temp = {x,y - 1, 10 + distance + get_heuristic(x,y-1,xf,yf),distance + 10,4}
+        table.insert(open,temp)
+      end
     end
 
     actual = open[get_closest(open)] --we get the max node actually visitable from the open ones
@@ -132,6 +162,7 @@ function get_directions(x,y,xf,yf)
     if x == xf and y == yf then
       find = true
     end
+    --we find our path
 
   end
   print("we find it")
