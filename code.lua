@@ -58,19 +58,21 @@ function create_map(size)
       map[n][m] = 0
     end
   end
-  --borders
-  for n = 1,size do
-    map[1][n] = 1
-    map[size][n] = 1
-    map[n][1] = 1
-    map[n][size] = 1
 
-  end
-  --we select start and finish
-  start = {2,math.random(1,size)}
-  final = {size,math.random(1,size)}
-  map[size][final[2]] = 3
-  return map
+--borders
+for n = 1,size do
+  map[1][n] = 1
+  map[size][n] = 1
+  map[n][1] = 1
+  map[n][size] = 1
+
+end
+--we select start and finish
+start = {2,math.random(1,size)}
+final = {size,math.random(1,size)}
+map[size][final[2]] = 3
+map[2][start[2]] = 0
+return map
 end
 
 function fill_map(map)
@@ -103,10 +105,27 @@ map1 = create_map(size)
 --develop variables
 --we create our map
 
+function find_parent(x,y,array)
+  for n = 1,#array do
+    for n = 1,#array do
+      if array[n][1] == x and array[n][2] == y then
+        return array[n][5]
+      end
+    end
+  end
+end 
 
-
+--code to generate
+function show(array)
+  for n = 1,size do
+    for j = 1,size do
+      print(n,j,array[n][j])
+    end
+  end
+end
 
 function get_directions(x,y,xf,yf)
+  local sx,sy = x,y
   local movement = {}  -- 1 is left, 2 is right, 3 is up, 4 is down
   local weight = get_heuristic(x,y,xf,yf)
   local distance = 0;
@@ -117,8 +136,8 @@ function get_directions(x,y,xf,yf)
   local find = false
   local actual = open[get_closest(open)]
   local temp = {}
+  table.insert(visited,actual)
   while(find == false) do
-    table.insert(visited,
     table.remove(open,get_closest(open))
     --we check and add the parents
     if map1[x+1][y] ~= 1 then
@@ -157,36 +176,49 @@ function get_directions(x,y,xf,yf)
 
     actual = open[get_closest(open)] --we get the max node actually visitable from the open ones
     x,y = actual[1],actual[2] --we asign the values to x, y
-    print(x,y,actual[3])
+    print(x,y,actual[3],actual[5])
     distance = actual[4]
     if x == xf and y == yf then
       find = true
+      temp = {x,y}
+      table.insert(movement,1,temp)
     end
+    table.insert(visited,actual)
     --we find our path
 
   end
   print("we find it")
-
-end
-
---code to generate
-function show(array)
-  for n = 1,size do
-    for j = 1,size do
-
-      print(n,j,array[n][j])
+  --Now we get the path
+  finished = false
+  while finished ~= true do
+    direction = find_parent(x,y,visited)
+    if direction == 1 then
+      x = x - 1
+    end
+    if direction == 2 then
+      x = x + 1
+    end
+    if direction == 3 then
+      y = y - 1
+    end
+    if direction == 4 then
+      y = y + 1
+    end
+    temp = {x,y}
+    table.insert(movement,1,temp)
+    if x== sx and y == sy then
+      finished = true
     end
   end
+  for n = 1,#movement do
+    print(movement[n][1],movement[n][2])
+  end
+  return movement
 end
 
 
 print(start[1],start[2])
 
-dummy = {{2,1,9},{2,3,4},{2,2,8},{2,3,4},{2,2,8}}
-
-print(get_closest(dummy))
-
-show(map1)
-get_directions(2,3,7,5)
+--show(map1)
+path = get_directions(start[1],start[2],final[1],final[2])
 --trial code
---print(math.random(1,10))
